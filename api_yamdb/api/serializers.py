@@ -1,7 +1,6 @@
-from rest_framework import serializers
 from django.contrib.auth import get_user_model
-
-from reviews.models import Category, Genre, Title, Review, Comment
+from rest_framework import serializers
+from reviews.models import Category, Comment, Genre, Review, Title
 
 User = get_user_model()
 
