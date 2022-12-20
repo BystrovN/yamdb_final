@@ -1,20 +1,21 @@
-from django.contrib.auth import get_user_model
-from django.shortcuts import get_object_or_404
-from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import status
-from rest_framework.exceptions import NotFound, ValidationError
-from rest_framework.filters import SearchFilter
-from rest_framework.generics import ListCreateAPIView
-from rest_framework.pagination import PageNumberPagination
-from rest_framework.permissions import IsAuthenticatedOrReadOnly
-from rest_framework.response import Response
 from rest_framework.views import APIView
-from reviews.models import Category, Comment, Genre, Review, Title
-from users.permissions import AdminOrReadOnly, AuthorOrAdminOrReadOnly, IsAdmin
+from rest_framework.response import Response
+from rest_framework.generics import ListCreateAPIView
+from rest_framework.filters import SearchFilter
+from rest_framework.permissions import IsAuthenticatedOrReadOnly
+from rest_framework.exceptions import ValidationError, NotFound
+from django.shortcuts import get_object_or_404
+from django.contrib.auth import get_user_model
+from django_filters.rest_framework import DjangoFilterBackend
 
 from . import serializers
-from .filters import TitleFilter
 from .rating import Rating
+from .filters import TitleFilter
+from reviews.models import Category, Genre, Title, Review, Comment
+from users.permissions import IsAdmin, AdminOrReadOnly, AuthorOrAdminOrReadOnly
+from .pagination import CustomPagination
+
 
 User = get_user_model()
 
@@ -27,7 +28,7 @@ class CategoryListCreateView(ListCreateAPIView):
     permission_classes = (AdminOrReadOnly,)
     filter_backends = (SearchFilter,)
     search_fields = ('name',)
-    pagination_class = PageNumberPagination
+    pagination_class = CustomPagination
 
 
 class CategoryDeleteView(APIView):
@@ -55,7 +56,7 @@ class GenreListCreateView(ListCreateAPIView):
     permission_classes = (AdminOrReadOnly,)
     filter_backends = (SearchFilter,)
     search_fields = ('name',)
-    pagination_class = PageNumberPagination
+    pagination_class = CustomPagination
 
 
 class GenreDeleteView(APIView):
@@ -82,7 +83,7 @@ class TitleListCreateView(ListCreateAPIView):
     permission_classes = (AdminOrReadOnly,)
     filter_backends = (DjangoFilterBackend,)
     filterset_class = TitleFilter
-    pagination_class = PageNumberPagination
+    pagination_class = CustomPagination
 
     def get_serializer_class(self):
         if self.request.method == 'GET':
@@ -134,7 +135,7 @@ class ReviewListCreateView(ListCreateAPIView):
 
     serializer_class = serializers.ReviewSerializer
     permission_classes = (IsAuthenticatedOrReadOnly,)
-    pagination_class = PageNumberPagination
+    pagination_class = CustomPagination
 
     def get_title(self):
         return get_object_or_404(Title, id=self.kwargs.get('titles_id'))
@@ -210,7 +211,7 @@ class CommentListCreateView(ListCreateAPIView):
 
     serializer_class = serializers.CommentSerializer
     permission_classes = (IsAuthenticatedOrReadOnly,)
-    pagination_class = PageNumberPagination
+    pagination_class = CustomPagination
 
     def get_review(self):
         review = get_object_or_404(Review, id=self.kwargs.get('review_id'))

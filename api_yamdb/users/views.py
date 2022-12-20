@@ -1,19 +1,20 @@
-from django.contrib.auth import get_user_model
-from django.core.mail import send_mail
-from django.shortcuts import get_object_or_404
 from rest_framework import status
+from rest_framework.views import APIView
+from rest_framework.response import Response
+from rest_framework.permissions import AllowAny
 from rest_framework.exceptions import ValidationError
 from rest_framework.filters import SearchFilter
 from rest_framework.generics import ListCreateAPIView
 from rest_framework.pagination import PageNumberPagination
-from rest_framework.permissions import AllowAny
-from rest_framework.response import Response
-from rest_framework.views import APIView
+from django.core.mail import send_mail
+from django.shortcuts import get_object_or_404
+from django.contrib.auth import get_user_model
 from rest_framework_simplejwt.tokens import AccessToken
 
-from . import serializers
-from .authentication import generate_confirmation_code
 from .permissions import IsAdmin
+from .authentication import generate_confirmation_code
+from . import serializers
+
 
 User = get_user_model()
 
@@ -162,5 +163,6 @@ class JWTUserView(APIView):
                     {'access': f'{jwt_token}'},
                     status=status.HTTP_200_OK,
                 )
-            raise ValidationError('Неверный код подтверждения')
+            else:
+                raise ValidationError('Неверный код подтверждения')
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)

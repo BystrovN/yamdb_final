@@ -1,5 +1,5 @@
-from random import randint
 from secrets import token_hex
+from random import randint
 
 
 def generate_confirmation_code():
