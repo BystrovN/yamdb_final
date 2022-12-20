@@ -5,6 +5,7 @@ from rest_framework import status
 from rest_framework.exceptions import NotFound, ValidationError
 from rest_framework.filters import SearchFilter
 from rest_framework.generics import ListCreateAPIView
+from rest_framework.pagination import PageNumberPagination
 from rest_framework.permissions import IsAuthenticatedOrReadOnly
 from rest_framework.response import Response
 from rest_framework.views import APIView
@@ -13,7 +14,6 @@ from users.permissions import AdminOrReadOnly, AuthorOrAdminOrReadOnly, IsAdmin
 
 from . import serializers
 from .filters import TitleFilter
-from .pagination import CustomPagination
 from .rating import Rating
 
 User = get_user_model()
@@ -27,7 +27,7 @@ class CategoryListCreateView(ListCreateAPIView):
     permission_classes = (AdminOrReadOnly,)
     filter_backends = (SearchFilter,)
     search_fields = ('name',)
-    pagination_class = CustomPagination
+    pagination_class = PageNumberPagination
 
 
 class CategoryDeleteView(APIView):
@@ -55,7 +55,7 @@ class GenreListCreateView(ListCreateAPIView):
     permission_classes = (AdminOrReadOnly,)
     filter_backends = (SearchFilter,)
     search_fields = ('name',)
-    pagination_class = CustomPagination
+    pagination_class = PageNumberPagination
 
 
 class GenreDeleteView(APIView):
@@ -82,7 +82,7 @@ class TitleListCreateView(ListCreateAPIView):
     permission_classes = (AdminOrReadOnly,)
     filter_backends = (DjangoFilterBackend,)
     filterset_class = TitleFilter
-    pagination_class = CustomPagination
+    pagination_class = PageNumberPagination
 
     def get_serializer_class(self):
         if self.request.method == 'GET':
@@ -134,7 +134,7 @@ class ReviewListCreateView(ListCreateAPIView):
 
     serializer_class = serializers.ReviewSerializer
     permission_classes = (IsAuthenticatedOrReadOnly,)
-    pagination_class = CustomPagination
+    pagination_class = PageNumberPagination
 
     def get_title(self):
         return get_object_or_404(Title, id=self.kwargs.get('titles_id'))
@@ -210,7 +210,7 @@ class CommentListCreateView(ListCreateAPIView):
 
     serializer_class = serializers.CommentSerializer
     permission_classes = (IsAuthenticatedOrReadOnly,)
-    pagination_class = CustomPagination
+    pagination_class = PageNumberPagination
 
     def get_review(self):
         review = get_object_or_404(Review, id=self.kwargs.get('review_id'))
