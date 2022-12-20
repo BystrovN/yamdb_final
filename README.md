@@ -1,4 +1,4 @@
-https://github.com/BystrovN/yamdb_final/actions/workflows/yamdb_workflow.yml/badge.svg
+![YaTube CI/CD]https://github.com/BystrovN/yamdb_final/actions/workflows/yamdb_workflow.yml/badge.svg
 
 # Welcome!
 
