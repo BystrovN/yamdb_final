@@ -1,5 +1,6 @@
-from rest_framework.exceptions import ValidationError
 from datetime import date
+
+from rest_framework.exceptions import ValidationError
 
 
 def validate_title_year(year):
