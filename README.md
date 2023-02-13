@@ -1,7 +1,6 @@
   
 ![YaTube CI/CD](https://github.com/BystrovN/yamdb_final/actions/workflows/yamdb_workflow.yml/badge.svg)
 
-# Welcome!
 
 Проект **YaMDb** собирает отзывы пользователей на различные произведения. Произведения делятся на категории: «Книги», «Фильмы», «Музыка». Список категорий может быть расширен администратором.
 
